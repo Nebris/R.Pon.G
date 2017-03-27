@@ -1,4 +1,4 @@
-import pygame,sys,random
+import pygame,sys,random,Hero,Enemy
 widthScreen=800
 heightScreen=int(widthScreen*9.0/16.0)
 pMenuHeight=heightScreen/5*3
