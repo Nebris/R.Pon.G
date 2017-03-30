@@ -20,9 +20,9 @@ black=(0,0,0)
 white=(255,255,255)
 grey=[100,100,100]
 
-player = {"pos": [padWidth, (heightScreen / 2) - (padWidth / 2)], "height": 100, "speed": 3, "upkey": 119, "downkey": 115,
+player = {"pos": [padWidth, (heightScreen / 2) - (padWidth / 2)], "height": widthScreen/8, "speed": 3, "upkey": 119, "downkey": 115,
         "color": white, "dmg":1,"hp":2}
-enemy = {"pos": [widthScreen - (padWidth * 2), (heightScreen / 2) - (padWidth / 2)], "height": 100, "speed": 3,
+enemy = {"pos": [widthScreen - (padWidth * 2), (heightScreen / 2) - (padWidth / 2)], "height": widthScreen/8, "speed": 3,
         "upkey": 273, "downkey": 274, "color": white, "dmg":1,"hp":2}
 
 def drawPaddle(paddle):
@@ -119,9 +119,22 @@ def centerText(text,size,pos,pausable,box=False,clickable=False):
                 return True
 
 def convertPad(pad):
-    tempPad=pad
-    tempPad["maxhp"]=pad["hp"]
-    return tempPad
+    temppad={}
+    temppad["maxhp"]=pad.maxhp
+    temppad["height"]=pad.height
+    temppad["speed"]=pad.speed
+    temppad["color"]=white
+    temppad["dmg"]=pad.dmg
+    temppad["hp"]=pad.maxhp
+    try:
+        temppad["upkey"]=pad.upkey
+        temppad["downkey"]=pad.downkey
+        temppad["pos"] = [padWidth, (heightScreen / 2) - (padWidth / 2)]
+    except:
+        temppad["upkey"] = 273
+        temppad["downkey"] = 274
+        temppad["pos"]=[widthScreen-padWidth*2 , (heightScreen / 2) - (padWidth / 2)]
+    return temppad
 
 def drawPause(pause,pXPos,options,controls,pad1):
     pygame.draw.rect(screen,black,((widthScreen/2-pMenuWidth/2-pXPos,heightScreen/5),(pMenuWidth,pMenuHeight)))
@@ -187,7 +200,7 @@ def botMove(ball,pad2,gamemode):
                 if pad2["pos"][1]+pad2["height"]>=heightScreen:
                     pad2["pos"][1]=heightScreen-pad2["height"]
 
-def pong(playerpad,enemypad,gamemode):
+def pong(playerpad,enemypad):
     global screen
     global pause
 
@@ -195,6 +208,7 @@ def pong(playerpad,enemypad,gamemode):
     screen=pygame.display.set_mode((widthScreen,heightScreen))
     fpsclock=pygame.time.Clock()
 
+    gamemode=enemypad.gamemode
     pause=False
     pXPos=0
     options=False
@@ -245,5 +259,6 @@ def pong(playerpad,enemypad,gamemode):
 
         pygame.display.update()
         fpsclock.tick(fps)
-
-print pong(player,enemy,"bot1")
+a=Hero.hero()
+b=Enemy.enemy()
+print pong(a,b)
